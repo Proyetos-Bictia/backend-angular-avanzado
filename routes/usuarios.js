@@ -13,7 +13,7 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const router = Router();
 
 router.get('/', validarJWT, (req, res) => {
-    controller.getUsuarios().then(data => {
+    controller.getUsuarios(req.query.desde || 0).then(data => {
         response.success(req, res, data, 200)
     }).catch(err => console.log(err))
 })
