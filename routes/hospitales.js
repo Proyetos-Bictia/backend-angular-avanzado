@@ -33,20 +33,28 @@ router.post('/',
         })
     })
 
-router.put('/:uid', (req, res) => {
-    controller.actualizarHospital(req.params.uid, req.body).then(data => {
-        response.success(req, res, data, 200)
-    }).catch(err => {
-        response.error(req, res, err.msg, err.status)
+router.put('/:uid',
+    [
+        validarJWT,
+        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        validarCampos,
+    ]
+    , (req, res) => {
+        controller.actualizarHospital(req.params.uid, req.body.nombre, req.uid).then(data => {
+            response.success(req, res, data, 200)
+        }).catch(err => {
+            response.error(req, res, err.msg || err, err.status || 500)
+        })
     })
-})
 
-router.delete('/:uid', validarJWT, (req, res) => {
-    controller.borrarHospital(req.params.uid).then(data => {
-        response.success(req, res, data, 200)
-    }).catch(err => {
-        response.error(req, res, err.msg || err, err.status || 500)
+router.delete('/:uid',
+    validarJWT,
+    (req, res) => {
+        controller.borrarHospital(req.params.uid).then(data => {
+            response.success(req, res, data, 200)
+        }).catch(err => {
+            response.error(req, res, err.msg || err, err.status || 500)
+        })
     })
-})
 
 module.exports = router

@@ -6,7 +6,9 @@ const { check } = require('express-validator');
 
 const response = require('../response/response');
 const controller = require('../controllers/auth');
+
 const { validarCampos } = require('../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 const router = Router();
 
@@ -30,6 +32,18 @@ router.post('/google', [
 ],
     (req, res) => {
         controller.googleSignIn(req.body.token).then(data => {
+            response.success(req, res, data, 200)
+        }).catch(err => {
+            response.error(req, res, err.msg || err, err.status || 500)
+        })
+    }
+)
+
+router.post('/renew', [
+    validarJWT
+],
+    (req, res) => {
+        controller.renewToken(req.uid).then(data => {
             response.success(req, res, data, 200)
         }).catch(err => {
             response.error(req, res, err.msg || err, err.status || 500)

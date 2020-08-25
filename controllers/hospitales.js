@@ -16,12 +16,44 @@ const crearHospital = async (hospital, uid) => {
     }
 }
 
-const actualizarHospital = async () => {
-    return 'actualizarHospital'
+const actualizarHospital = async (id, nombre, idUser) => {
+
+    try {
+        const hospitalDB = await Hospital.findById(id);
+
+        if (!hospitalDB) {
+            return Promise.reject({ status: 404, msg: 'Hospital no encontrado' });
+        }
+        const cambiosHospital = {
+            nombre,
+            usuario: idUser
+        }
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true });
+
+        return hospitalActualizado
+
+    } catch (error) {
+        console.log(error);
+        return Promise.reject('Revisar la consola')
+    }
 }
 
-const borrarHospital = async () => {
-    return 'borrarHospital'
+const borrarHospital = async (id) => {
+    try {
+        const hospitalDB = await Hospital.findById(id);
+
+        if (!hospitalDB) {
+            return Promise.reject({ status: 404, msg: 'Hospital no encontrado' });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+        return 'Se elimino correctamente'
+
+    } catch (error) {
+        console.log(error);
+        return Promise.reject('Revisar la consola')
+    }
 }
 
 module.exports = {

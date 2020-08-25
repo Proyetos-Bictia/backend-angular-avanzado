@@ -33,15 +33,23 @@ router.post('/', [
     })
 })
 
-router.put('/:uid', (req, res) => {
-    controller.actualizarMedico(req.params.uid, req.body).then(data => {
-        response.success(req, res, data, 200)
-    }).catch(err => {
-        response.error(req, res, err.msg, err.status)
+router.put('/:uid',
+    [
+        validarJWT,
+        check('nombre', 'Nombre es obligatorio').not().isEmpty(),
+        check('hospital', 'Hospital es obligatorio').not().isEmpty(),
+        check('hospital', 'Id no es valido').isMongoId(),
+        validarCampos,
+    ],
+    (req, res) => {
+        controller.actualizarMedico(req.params.uid, req.body, req.uid).then(data => {
+            response.success(req, res, data, 200)
+        }).catch(err => {
+            response.error(req, res, err.msg, err.status)
+        })
     })
-})
 
-router.delete('/:uid', (req, res) => {
+router.delete('/:uid', validarJWT, (req, res) => {
     controller.borrarMedico(req.params.uid).then(data => {
         response.success(req, res, data, 200)
     }).catch(err => {
