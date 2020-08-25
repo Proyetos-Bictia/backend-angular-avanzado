@@ -24,5 +24,18 @@ router.post('/', [
     }
 )
 
+router.post('/google', [
+    check('token', 'Token de google es obligatorio').not().isEmpty(),
+    validarCampos
+],
+    (req, res) => {
+        controller.googleSignIn(req.body.token).then(data => {
+            response.success(req, res, data, 200)
+        }).catch(err => {
+            response.error(req, res, err.msg || err, err.status || 500)
+        })
+    }
+)
+
 
 module.exports = router
