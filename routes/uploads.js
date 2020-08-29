@@ -27,4 +27,12 @@ router.put('/:tipo/:id',
         })
     })
 
+router.get('/:tipo/:foto', (req, res) => {
+    controller.retornaImagen(req.params.tipo, req.params.foto).then(data => {
+        res.sendFile(data);
+    }).catch(err => {
+        response.error(req, res, err.msg, err.status)
+    })
+})
+
 module.exports = router;

@@ -13,7 +13,7 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', validarJWT, (req, res) => {
     controller.getMedicos().then(data => {
         response.success(req, res, data, 200)
     }).catch(err => console.log(err))
@@ -51,6 +51,14 @@ router.put('/:uid',
 
 router.delete('/:uid', validarJWT, (req, res) => {
     controller.borrarMedico(req.params.uid).then(data => {
+        response.success(req, res, data, 200)
+    }).catch(err => {
+        response.error(req, res, err.msg || err, err.status || 500)
+    })
+})
+
+router.get('/:uid', validarJWT, (req, res) => {
+    controller.getMedicoPorId(req.params.uid).then(data => {
         response.success(req, res, data, 200)
     }).catch(err => {
         response.error(req, res, err.msg || err, err.status || 500)

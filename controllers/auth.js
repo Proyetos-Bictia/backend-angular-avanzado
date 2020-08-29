@@ -68,11 +68,15 @@ const googleSignIn = async (token) => {
 
 const renewToken = async (uid) => {
 
-
+    const usuarioDB = await Usuario.findById(uid);
+    console.log(usuarioDB);
+    if (!usuarioDB) {
+        return Promise.reject('No se ha enncontrado usuario')
+    }
 
     //Generar el token
     const tokenFinal = await generarJWT(uid);
-    return tokenFinal
+    return { token: tokenFinal, usuario: usuarioDB }
 }
 
 module.exports = {

@@ -1,8 +1,9 @@
 const Medico = require('../models/medico');
+const { isValidObjectId } = require('mongoose')
 
 const getMedicos = async () => {
-    const medicos = Medico.find({}).populate('usuario', 'nombre')
-        .populate('hospital', 'nombre')
+    const medicos = Medico.find({}).populate('usuario', 'nombre img')
+        .populate('hospital', 'nombre img')
     return medicos
 }
 
@@ -56,9 +57,27 @@ const borrarMedico = async (id) => {
     }
 }
 
+const getMedicoPorId = async (id) => {
+    if (!id) {
+        return Promise.reject('falta el id')
+    }
+    if (!isValidObjectId(id)) {
+        return Promise.reject('Id no valido para la db')
+    }
+    try {
+        const medico = await Medico.findById(id)
+            .populate('hospital', 'nombre img')
+        return medico
+    } catch (error) {
+        console.log(error);
+        return Promise.reject('Revisar la consola')
+    }
+}
+
 module.exports = {
     getMedicos,
     crearMedico,
     actualizarMedico,
-    borrarMedico
+    borrarMedico,
+    getMedicoPorId
 }

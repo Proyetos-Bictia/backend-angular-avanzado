@@ -39,7 +39,7 @@ router.post('/google', [
     }
 )
 
-router.post('/renew', [
+router.get('/renew', [
     validarJWT
 ],
     (req, res) => {

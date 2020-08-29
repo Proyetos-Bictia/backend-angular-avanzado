@@ -114,3 +114,12 @@ dist
 .vscode-test
 
 # End of https://www.toptal.com/developers/gitignore/api/node,dotenv
+
+uploads/hospitales/**.jpg
+uploads/hospitales/**.png
+
+uploads/medicos/**.jpg
+uploads/medicos/**.png
+
+uploads/usuarios/**.jpg
+uploads/usuarios/**.png

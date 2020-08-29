@@ -1,4 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs')
 
 const { actualizarImagen } = require('../helpers/actualizar-imagen');
 
@@ -51,6 +53,20 @@ const fileUpload = async (tipo, id, files) => {
     return respuesta
 }
 
+const retornaImagen = async (tipo, foto) => {
+    const pathImg = path.join(__dirname, `../uploads/${tipo}/${foto}`);
+
+    //Imagen por defecto
+    if(fs.existsSync(pathImg)) {
+        return pathImg
+    } else {
+        const pathNoImage = path.join(__dirname, `../uploads/no-img.png`);
+        return pathNoImage
+    }
+
+}
+
 module.exports = {
-    fileUpload
+    fileUpload,
+    retornaImagen
 }
