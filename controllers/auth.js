@@ -4,6 +4,7 @@ const Usuario = require('../models/usuario');
 
 const { generarJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
+const { getMenuFrontend } = require('../helpers/menu-frontend')
 
 const login = async (user) => {
 
@@ -23,7 +24,7 @@ const login = async (user) => {
 
         //Generar el token
         const token = await generarJWT(usuarioDB.id);
-        return token
+        return { token, menu: getMenuFrontend(usuarioDB.role) }
     } catch (error) {
         console.log(error);
     }
